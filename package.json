@@ -1,0 +1,29 @@
+{
+  "name": "react-polling-app-socketio",
+  "version": "0.0.1",
+  "description": "A simple polling app built with React and socket.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m0t0r/react-polling-app-socketio.git"
+  },
+  "keywords": [
+    "app",
+    "react",
+    "express",
+    "socket.io"
+  ],
+  "author": "Vitaly",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/m0t0r/react-polling-app-socketio/issues"
+  },
+  "homepage": "https://github.com/m0t0r/react-polling-app-socketio#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "express": "^4.13.3"
+  }
+}
