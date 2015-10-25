@@ -19608,6 +19608,8 @@
 	var React = __webpack_require__(1);
 	var io = __webpack_require__(159);
 
+	var Header = __webpack_require__(209);
+
 	var App = React.createClass({
 	  displayName: 'App',
 
@@ -19617,14 +19619,14 @@
 	  },
 
 	  connect: function connect() {
-	    alert('Connected: ' + this.socket.id);
+	    console.log('Connected: ' + this.socket.id);
 	  },
 
 	  render: function render() {
 	    return React.createElement(
-	      'h1',
+	      'div',
 	      null,
-	      'React is ready! ;)'
+	      React.createElement(Header, { title: 'Polling App' })
 	    );
 	  }
 	});
@@ -26954,6 +26956,36 @@
 	};
 
 
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Header = React.createClass({
+	  displayName: 'Header',
+
+	  propTypes: {
+	    title: React.PropTypes.string.isRequired
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'header',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        this.props.title
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Header;
 
 /***/ }
 /******/ ]);
