@@ -8,7 +8,12 @@ const Header = React.createClass({
   render() {
     return (
       <header>
-        <h1>{this.props.title}</h1>
+        <div className="col-xs-10">
+          <h1>{this.props.title}</h1>
+        </div>
+        <div className="col-xs-2">
+          <span id="connection-status" className={this.props.status}></span>
+        </div>
       </header>
     );
   }

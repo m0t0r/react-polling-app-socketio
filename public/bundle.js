@@ -19608,25 +19608,42 @@
 	var React = __webpack_require__(1);
 	var io = __webpack_require__(159);
 
-	var Header = __webpack_require__(209);
+	var Header = __webpack_require__(210);
 
 	var App = React.createClass({
 	  displayName: 'App',
 
+	  getInitialState: function getInitialState() {
+	    return {
+	      status: 'disconnected',
+	      title: ''
+	    };
+	  },
+
 	  componentWillMount: function componentWillMount() {
 	    this.socket = io('http://localhost:8080');
 	    this.socket.on('connect', this.connect);
+	    this.socket.on('disconnect', this.disconnect);
+	    this.socket.on('welcome', this.welcome);
 	  },
 
 	  connect: function connect() {
-	    console.log('Connected: ' + this.socket.id);
+	    this.setState({ status: 'connected' });
+	  },
+
+	  disconnect: function disconnect() {
+	    this.setState({ status: 'disconnected' });
+	  },
+
+	  welcome: function welcome(serverState) {
+	    this.setState({ title: serverState.title });
 	  },
 
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(Header, { title: 'Polling App' })
+	      React.createElement(Header, { title: this.state.title, status: this.state.status })
 	    );
 	  }
 	});
@@ -26958,15 +26975,16 @@
 
 
 /***/ },
-/* 209 */
+/* 209 */,
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var React = __webpack_require__(1);
 
 	var Header = React.createClass({
-	  displayName: 'Header',
+	  displayName: "Header",
 
 	  propTypes: {
 	    title: React.PropTypes.string.isRequired
@@ -26974,12 +26992,21 @@
 
 	  render: function render() {
 	    return React.createElement(
-	      'header',
+	      "header",
 	      null,
 	      React.createElement(
-	        'h1',
-	        null,
-	        this.props.title
+	        "div",
+	        { className: "col-xs-10" },
+	        React.createElement(
+	          "h1",
+	          null,
+	          this.props.title
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "col-xs-2" },
+	        React.createElement("span", { id: "connection-status", className: this.props.status })
 	      )
 	    );
 	  }
