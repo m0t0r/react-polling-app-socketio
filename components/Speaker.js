@@ -6,7 +6,7 @@ const Speaker = React.createClass({
   render() {
     return (
       <div>
-        <h1>Speaker</h1>
+        <h1>Speaker {this.props.dance}</h1>
       </div>
     );
   }

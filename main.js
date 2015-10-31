@@ -10,7 +10,7 @@ let App = require('./components/App');
 let Audience = require('./components/Audience');
 let Speaker = require('./components/Speaker');
 let Board = require('./components/Board');
-
+let Whoops404 = require('./components/Whoops404');
 
 
 ReactDOM.render((
@@ -19,6 +19,7 @@ ReactDOM.render((
       <IndexRoute component={Audience}/>
       <Route name='speaker' path='speaker' component={Speaker} />
       <Route name='board' path="board" component={Board} />
+      <Route path="*" component={Whoops404}/>
     </Route>
   </Router>
 ), document.getElementById('react-container'));
