@@ -10,7 +10,8 @@ const App = React.createClass({
     return {
       status: 'disconnected',
       title: '',
-      dance: 'yo, wow!'
+      member: {},
+      audience: []
     }
   },
 
@@ -19,13 +20,20 @@ const App = React.createClass({
     this.socket.on('connect', this.connect);
     this.socket.on('disconnect', this.disconnect);
     this.socket.on('welcome', this.welcome);
+    this.socket.on('joined', this.joined);
+    this.socket.on('audience', this.updateAudience);
   },
 
   connect() {
+    var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
+
+    if(member) {
+      this.emit('join', member);
+    }
     this.setState({status: 'connected'});
   },
 
-  disconnect(){
+  disconnect() {
     this.setState({status: 'disconnected'});
   },
 
@@ -33,11 +41,24 @@ const App = React.createClass({
     this.setState({title: serverState.title});
   },
 
+  joined(member) {
+    sessionStorage.member = JSON.stringify(member);
+    this.setState({member: member});
+  },
+
+  updateAudience(audience) {
+    this.setState({audience: audience});
+  },
+
+  emit(event, payload) {
+    this.socket.emit(event, payload);
+  },
+
   render() {
     return (
       <div>
       <Header title={this.state.title} status={this.state.status}/>
-      {React.cloneElement(this.props.children, {...this.state})}
+      {React.cloneElement(this.props.children, {...this.state, emit: this.emit})}
       </div>
     );
   }
