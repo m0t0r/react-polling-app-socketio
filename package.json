@@ -27,6 +27,7 @@
   "dependencies": {
     "bootstrap": "^3.3.5",
     "express": "^4.13.3",
+    "lodash": "^3.10.1",
     "react": "^0.14.1",
     "react-dom": "^0.14.1",
     "react-router": "^1.0.0-rc3",
