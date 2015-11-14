@@ -9,6 +9,7 @@ var io = require('socket.io')(server);
 
 var connections = [];
 var audience = [];
+var speaker = {};
 var defaults = {
   title: 'Untitled presentation'
 };
@@ -22,12 +23,21 @@ io.on('connection', function(socket) {
   socket.on('join', function(payload) {
     var newMember = {
       id: this.id,
-      name: payload.name
+      name: payload.name,
+      type: 'member'
     };
     audience.push(newMember);
     this.emit('joined', newMember);
 
     io.sockets.emit('audience', audience);
+  });
+
+  socket.on('start', function(payload) {
+    speaker.name = payload.name;
+    speaker.id = this.id;
+    speaker.type = 'speaker';
+
+    this.emit('joined', speaker);
   });
 
   // set default title

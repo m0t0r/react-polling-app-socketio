@@ -2,6 +2,7 @@
 
 let React = require('react');
 let ReactDOM = require('react-dom');
+let Link = require('react-router').Link;
 
 const Join = React.createClass({
 
@@ -17,6 +18,7 @@ const Join = React.createClass({
         <label htmlFor="fullName">Full Name:</label>
         <input ref="fullName" type="text" id="fullName" className="form-control" placeholder="Enter your full name..." required/>
         <button className="btn btn-primary">Join</button>
+        <Link to={`/speaker`}>Join as speaker</Link>
       </form>
     );
   }
