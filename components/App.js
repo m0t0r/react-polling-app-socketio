@@ -12,7 +12,7 @@ const App = React.createClass({
       title: '',
       member: {},
       audience: [],
-      speaker: {}
+      speaker: ''
     }
   },
 
@@ -20,26 +20,34 @@ const App = React.createClass({
     this.socket = io('http://localhost:8080');
     this.socket.on('connect', this.connect);
     this.socket.on('disconnect', this.disconnect);
-    this.socket.on('welcome', this.welcome);
+    this.socket.on('welcome', this.updateState);
     this.socket.on('joined', this.joined);
     this.socket.on('audience', this.updateAudience);
+    this.socket.on('start', this.start);
+    this.socket.on('end', this.updateState);
   },
 
   connect() {
     var member = (sessionStorage.member) ? JSON.parse(sessionStorage.member) : null;
 
-    if(member) {
+    if(member && member.type === 'member') {
       this.emit('join', member);
+    } else if (member && member.type === 'speaker') {
+      this.emit('start', {name: member.name, title: sessionStorage.title});
     }
     this.setState({status: 'connected'});
   },
 
   disconnect() {
-    this.setState({status: 'disconnected'});
+    this.setState({
+      status: 'disconnected',
+      title: 'Disconnected',
+      speaker: ''
+    });
   },
 
-  welcome(serverState) {
-    this.setState({title: serverState.title});
+  updateState(serverState) {
+    this.setState(serverState);
   },
 
   joined(member) {
@@ -51,6 +59,13 @@ const App = React.createClass({
     this.setState({audience: audience});
   },
 
+  start(presentation) {
+    if (this.state.member.type === 'speaker') {
+      sessionStorage.title = presentation.title;
+    }
+    this.setState(presentation);
+  },
+
   emit(event, payload) {
     this.socket.emit(event, payload);
   },
@@ -58,7 +73,7 @@ const App = React.createClass({
   render() {
     return (
       <div>
-      <Header title={this.state.title} status={this.state.status}/>
+      <Header {...this.state}/>
       {React.cloneElement(this.props.children, {...this.state, emit: this.emit})}
       </div>
     );

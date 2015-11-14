@@ -36,20 +36,21 @@ io.on('connection', function(socket) {
     speaker.name = payload.name;
     speaker.id = this.id;
     speaker.type = 'speaker';
-
     this.emit('joined', speaker);
+    io.sockets.emit('start', {title: payload.title, speaker: speaker.name});
   });
 
-  // set default title
-  socket.emit('welcome', {title: defaults.title});
+  socket.emit('welcome', {title: defaults.title, audience: audience, speaker: speaker.name});
 
   socket.once('disconnect', function() {
     var member = _.findWhere(audience, {id: this.id});
 
-    if(member) {
+    if (member) {
       audience.splice(audience.indexOf(member), 1);
       io.sockets.emit('audience', audience);
       console.log('Left: %s, (%s audience members connected)', member.name, audience.length);
+    } else if (this.id === speaker.id) {
+      io.sockets.emit('end', {title: defaults.title, speaker: ''});
     }
 
     connections.splice(connections.indexOf(socket), 1);
