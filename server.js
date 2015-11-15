@@ -9,6 +9,8 @@ var io = require('socket.io')(server);
 
 var connections = [];
 var audience = [];
+var questions = require('./data/questions');
+var currentQuestion = '';
 var speaker = {};
 var defaults = {
   title: 'Untitled presentation'
@@ -40,7 +42,18 @@ io.on('connection', function(socket) {
     io.sockets.emit('start', {title: payload.title, speaker: speaker.name});
   });
 
-  socket.emit('welcome', {title: defaults.title, audience: audience, speaker: speaker.name});
+  socket.on('ask', function(question) {
+    currentQuestion = question;
+    io.sockets.emit('ask', currentQuestion);
+  });
+
+  socket.emit('welcome', {
+    title: defaults.title,
+    audience: audience,
+    speaker: speaker.name,
+    questions: questions,
+    currentQuestion: currentQuestion
+  });
 
   socket.once('disconnect', function() {
     var member = _.findWhere(audience, {id: this.id});
