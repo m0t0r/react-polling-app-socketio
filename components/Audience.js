@@ -3,6 +3,7 @@
 let React = require('react');
 let Display = require('./parts/Display');
 let Join = require('./parts/Join');
+let Ask = require('./parts/Ask');
 
 const Audience = React.createClass({
   render() {
@@ -18,7 +19,7 @@ const Audience = React.createClass({
               <p>Questions will appear here</p>
             </Display>
             <Display if={this.props.currentQuestion}>
-              <h2>{this.props.currentQuestion.q}</h2>
+              <Ask question={this.props.currentQuestion} emit={this.props.emit}></Ask>
             </Display>
           </Display>
 

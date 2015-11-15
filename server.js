@@ -9,6 +9,12 @@ var io = require('socket.io')(server);
 
 var connections = [];
 var audience = [];
+var results = {
+  a: 0,
+  b: 0,
+  c: 0,
+  d: 0
+};
 var questions = require('./data/questions');
 var currentQuestion = '';
 var speaker = {};
@@ -44,7 +50,12 @@ io.on('connection', function(socket) {
 
   socket.on('ask', function(question) {
     currentQuestion = question;
+    results = {a: 0, b: 0, c: 0, d: 0};
     io.sockets.emit('ask', currentQuestion);
+  });
+
+  socket.on('answer', function(payload) {
+    results[payload.choice]++;
   });
 
   socket.emit('welcome', {
